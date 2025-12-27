@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Pro - Create & Scan</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="author" content="Harsh Jethwa">
+    <link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🔲</span>
+                <span class="logo-text">QR Code Pro</span>
+            </div>
+            <div class="nav-links">
+                <a href="#generator" class="nav-link active" data-page="generator">
+                    <span class="nav-icon">✏️</span> 
+                    <span class="nav-text">Generator</span>
+                </a>
+                <a href="#scanner" class="nav-link" data-page="scanner">
+                    <span class="nav-icon">📷</span> 
+                    <span class="nav-text">Scanner</span>
+                </a>
+                <a href="#history" class="nav-link" data-page="history">
+                    <span class="nav-icon">📜</span> 
+                    <span class="nav-text">History</span>
+                </a>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <span class="theme-icon">🌙</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Generator Page -->
+    <div class="page active" id="generatorPage">
+        <div class="container">
+            <div class="page-header">
+                <h1>✨ Create QR Code</h1>
+                <p class="subtitle">Generate QR codes for text, URLs, WiFi, contacts, and more</p>
+            </div>
+
+            <div class="content-grid">
+                <!-- Left Panel - Input -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Select QR Code Type</h2>
+                    </div>
+                    
+                    <!-- Preset Tabs -->
+                    <div class="preset-tabs">
+                        <button class="preset-tab active" data-preset="text">
+                            <span class="preset-icon">📝</span> 
+                            <span class="preset-label">Text/URL</span>
+                        </button>
+                        <button class="preset-tab" data-preset="wifi">
+                            <span class="preset-icon">📶</span> 
+                            <span class="preset-label">WiFi</span>
+                        </button>
+                        <button class="preset-tab" data-preset="vcard">
+                            <span class="preset-icon">👤</span> 
+                            <span class="preset-label">vCard</span>
+                        </button>
+                        <button class="preset-tab" data-preset="email">
+                            <span class="preset-icon">✉️</span> 
+                            <span class="preset-label">Email</span>
+                        </button>
+                    </div>
+
+                    <!-- Text/URL Form -->
+                    <div class="preset-form active" id="textForm">
+                        <div class="input-group">
+                            <label for="textInput">Enter text or URL</label>
+                            <textarea id="textInput" placeholder="https://example.com or any text..." rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- WiFi Form -->
+                    <div class="preset-form" id="wifiForm">
+                        <div class="input-group">
+                            <label for="wifiSSID">Network Name (SSID)</label>
+                            <input type="text" id="wifiSSID" placeholder="My WiFi Network">
+                        </div>
+                        <div class="input-group">
+                            <label for="wifiPassword">Password</label>
+                            <input type="text" id="wifiPassword" placeholder="password123">
+                        </div>
+                        <div class="input-group">
+                            <label for="wifiSecurity">Security Type</label>
+                            <select id="wifiSecurity">
+                                <option value="WPA">WPA/WPA2</option>
+                                <option value="WEP">WEP</option>
+                                <option value="nopass">None</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- vCard Form -->
+                    <div class="preset-form" id="vcardForm">
+                        <div class="input-group">
+                            <label for="vcardName">Full Name</label>
+                            <input type="text" id="vcardName" placeholder="John Doe">
+                        </div>
+                        <div class="input-group">
+                            <label for="vcardPhone">Phone</label>
+                            <input type="tel" id="vcardPhone" placeholder="+1234567890">
+                        </div>
+                        <div class="input-group">
+                            <label for="vcardEmail">Email</label>
+                            <input type="email" id="vcardEmail" placeholder="john@example.com">
+                        </div>
+                        <div class="input-group">
+                            <label for="vcardOrg">Organization</label>
+                            <input type="text" id="vcardOrg" placeholder="Company Name">
+                        </div>
+                    </div>
+
+                    <!-- Email Form -->
+                    <div class="preset-form" id="emailForm">
+                        <div class="input-group">
+                            <label for="emailTo">To</label>
+                            <input type="email" id="emailTo" placeholder="recipient@example.com">
+                        </div>
+                        <div class="input-group">
+                            <label for="emailSubject">Subject</label>
+                            <input type="text" id="emailSubject" placeholder="Email subject">
+                        </div>
+                        <div class="input-group">
+                            <label for="emailBody">Message</label>
+                            <textarea id="emailBody" placeholder="Email message..." rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" id="generateBtn">
+                        <span class="btn-icon">✨</span> Generate QR Code
+                    </button>
+                </div>
+
+                <!-- Right Panel - QR Code Preview -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Preview & Download</h2>
+                    </div>
+                    <div class="qr-preview" id="qrPreview">
+                        <div class="qr-placeholder">
+                            <span class="placeholder-icon">🔲</span>
+                            <p>Your QR code will appear here</p>
+                        </div>
+                    </div>
+                    <div class="qr-actions" id="qrActions" style="display: none;">
+                        <button class="btn btn-secondary" id="downloadBtn">
+                            <span class="btn-icon">💾</span> Download
+                        </button>
+                        <button class="btn btn-secondary" id="shareBtn">
+                            <span class="btn-icon">🔗</span> Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scanner Page -->
+    <div class="page" id="scannerPage">
+        <div class="container">
+            <div class="page-header">
+                <h1>📷 Scan QR Code</h1>
+                <p class="subtitle">Scan QR codes using your camera or upload an image</p>
+            </div>
+
+            <div class="content-grid single">
+                <div class="card">
+                    <div class="scanner-methods">
+                        <button class="method-btn active" id="cameraMethodBtn">
+                            <span class="method-icon">📷</span>
+                            <span class="method-text">Camera</span>
+                        </button>
+                        <button class="method-btn" id="uploadMethodBtn">
+                            <span class="method-icon">📁</span>
+                            <span class="method-text">Upload</span>
+                        </button>
+                    </div>
+
+                    <!-- Camera Scanner -->
+                    <div class="scanner-view active" id="cameraScanner">
+                        <div class="video-container">
+                            <video id="video" autoplay playsinline></video>
+                            <div class="scan-overlay">
+                                <div class="scan-frame"></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="startCameraBtn">
+                            <span class="btn-icon">📷</span> Start Camera
+                        </button>
+                        <button class="btn btn-danger" id="stopCameraBtn" style="display: none;">
+                            <span class="btn-icon">⏹️</span> Stop Camera
+                        </button>
+                        <p class="scan-status" id="scanStatus"></p>
+                    </div>
+
+                    <!-- Upload Scanner -->
+                    <div class="scanner-view" id="uploadScanner">
+                        <div class="upload-zone" id="uploadZone">
+                            <span class="upload-icon">📁</span>
+                            <p class="upload-text">Click to upload or drag & drop</p>
+                            <p class="upload-hint">Supports JPG, PNG, GIF</p>
+                            <input type="file" id="fileInput" accept="image/*" hidden>
+                        </div>
+                    </div>
+
+                    <!-- Scan Result -->
+                    <div class="scan-result" id="scanResult" style="display: none;">
+                        <div class="result-header">
+                            <h3>✅ Scanned Successfully</h3>
+                        </div>
+                        <div class="result-content">
+                            <p class="result-label">Content:</p>
+                            <div class="result-text" id="resultText"></div>
+                        </div>
+                        <div class="result-actions">
+                            <button class="btn btn-secondary" id="copyResultBtn">
+                                <span class="btn-icon">📋</span> Copy
+                            </button>
+                            <button class="btn btn-secondary" id="openResultBtn" style="display: none;">
+                                <span class="btn-icon">🔗</span> Open Link
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Page -->
+    <div class="page" id="historyPage">
+        <div class="container">
+            <div class="page-header">
+                <h1>📜 History</h1>
+                <p class="subtitle">Your generated and scanned QR codes</p>
+            </div>
+
+            <div class="history-tabs">
+                <button class="history-tab active" data-history="generated">Generated</button>
+                <button class="history-tab" data-history="scanned">Scanned</button>
+            </div>
+
+            <div class="card">
+                <div class="history-actions">
+                    <button class="btn btn-danger btn-small" id="clearHistoryBtn">
+                        <span class="btn-icon">🗑️</span> Clear All
+                    </button>
+                </div>
+
+                <div class="history-list active" id="generatedHistory">
+                    <div class="empty-state">
+                        <span class="empty-icon">📭</span>
+                        <p>No generated QR codes yet</p>
+                    </div>
+                </div>
+
+                <div class="history-list" id="scannedHistory">
+                    <div class="empty-state">
+                        <span class="empty-icon">📭</span>
+                        <p>No scanned QR codes yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">Developed by <span class="publisher-name">Harsh Jethwa</span></p>
+            <p class="footer-tagline">QR Code Pro - Making QR codes simple and beautiful</p>
+        </div>
+    </footer>
+
+    <canvas id="canvas" style="display: none;"></canvas>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
